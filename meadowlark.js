@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/public'))
 app.get('/', (req, res) => res.render('home'))
 
 app.get('/about', (req, res) => {
-  res.render('about', { fortune: fortune.getFortune() })
+  res.render('about', { fortune: fortune.getFortuneRandomly() })
 })
 
 // niestandardowa strona 404
