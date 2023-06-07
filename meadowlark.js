@@ -2,6 +2,7 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 
 const fortune = require('./lib/fortune.js')
+const swPerson = require("./lib/starWarsPerson.js")
 
 const app = express()
 
@@ -18,7 +19,25 @@ app.use(express.static(__dirname + '/public'))
 app.get('/', (req, res) => res.render('home'))
 
 app.get('/about', (req, res) => {
-  res.render('about', { fortune: fortune.getFortuneRandomly() })
+  fortune.getFortuneRandomly()
+  .then((ele)=>{
+    let cytat = ele.quote
+    res.render('about', { fortune: cytat })
+  })
+})
+
+app.get("/star/:userId", (req,res)=>{
+  swPerson.getStarWars(req.params.userId)
+  .then((ele)=>{
+    let filmy = `<p style="font-size:25px">${ele.name}</p>`;
+    
+    for(film of ele.films){
+      filmy += `<p><a target="_blank" href='${film}'>${film}</a></p>`
+    }
+    res.send(filmy)
+  }).catch((err)=>{
+    res.send("brak danych")
+  })
 })
 
 // niestandardowa strona 404
